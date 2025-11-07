@@ -1,0 +1,13 @@
+{
+  "name": "XIAO-SYNTH (ESP32-C6)",
+  "builds": [
+    {
+      "chipFamily": "ESP32-C6",
+      "parts": [
+        { "path": "bootloader-esp32c6.bin", "offset": 0 },
+        { "path": "partitions-esp32c6.bin", "offset": 32768 },
+        { "path": "firmware-esp32c6.bin", "offset": 65536 }
+      ]
+    }
+  ]
+}
