@@ -1,75 +1,64 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>XIAO-SYNTH Web Flasher</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      line-height: 1.6;
-      background-color: #f6f8fa;
-      color: #24292e;
-      max-width: 800px;
-      margin: 20px auto;
-      padding: 20px;
-    }
-    .container {
-      background-color: #fff;
-      border: 1px solid #d1d5da;
-      border-radius: 6px;
-      padding: 24px;
-    }
-    .button {
-      display: inline-block;
-      padding: 10px 16px;
-      font-size: 16px;
-      font-weight: 600;
-      color: #fff;
-      background-color: #2ea44f;
-      border: 1px solid rgba(27,31,35,.15);
-      border-radius: 6px;
-      text-decoration: none;
-      cursor: pointer;
-      margin-right: 10px;
-      margin-top: 10px;
-    }
-    .button:hover {
-      background-color: #2c974b;
-    }
-  </style>
-  <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XIAO-SYNTH - Web Flasher</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111827; /* Dark background */
+        }
+    </style>
 </head>
-<body>
-  <div class="container">
-    <h1>XIAO-SYNTH Web Flasher</h1>
-    <p>Flash the latest firmware for your Seeed Studio XIAO board directly from the browser.</p>
-    <p>
-      <b>Instructions:</b><br>
-      1. Plug in your XIAO board.<br>
-      2. Put it into <b>bootloader mode</b> (Hold BOOT, press RESET, release BOOT).<br>
-      3. Click the button for your board. The flasher will first connect, then flash.
-    </p>
+<body class="text-white flex items-center justify-center min-h-screen p-4">
 
-    <esp-web-install-button class="button"
-      manifest="release_assets/manifest-esp32s3.json">
-      Flash ESP32-S3
-    </esp-web-install-button>
-    
-    <esp-web-install-button class="button"
-      manifest="release_assets/manifest-esp32c3.json">
-      Flash ESP32-C3
-    </esp-web-install-button>
+    <div class="w-full max-w-lg mx-auto bg-gray-900 rounded-2xl shadow-2xl p-6 md:p-8">
+        <div class="text-center mb-6">
+            <h1 class="text-3xl font-bold text-blue-400">XIAO-SYNTH</h1>
+            <p class="text-gray-400">Web Flasher Utility</p>
+        </div>
 
-    <esp-web-install-button class="button"
-      manifest="release_assets/manifest-esp32c6.json">
-      Flash ESP32-C6
-    </esp-web-install-button>
+        <div class="space-y-4">
+            <div>
+                <label for="board-select" class="block text-sm font-medium text-gray-300 mb-1">1. Select your XIAO board</label>
+                <select id="board-select" class="w-full bg-gray-800 border border-gray-700 text-white rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500">
+                    <option value="esp32s3">XIAO ESP32-S3</option>
+                    <option value="esp32c3">XIAO ESP32-C3</option>
+                    <option value="esp32c6">XIAO ESP32-C6</option>
+                </select>
+            </div>
 
-    <div slot="unsupported" style="margin-top: 15px; color: #8B0000;">
-      Your browser doesn't support Web Serial. Please use Google Chrome or Microsoft Edge.
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-1">2. Install Firmware</label>
+                <esp-web-install-button id="install-button" class="w-full">
+                    <button slot="activate" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-4 rounded-lg transition">Install Firmware</button>
+                    <button slot="unsupported" class="w-full bg-gray-600 text-white font-semibold py-2.5 px-4 rounded-lg cursor-not-allowed">Unsupported Browser</button>
+                    <button slot="error" class="w-full bg-red-600 text-white font-semibold py-2.5 px-4 rounded-lg">Error</button>
+                </esp-web-install-button>
+            </div>
+        </div>
     </div>
 
-  </div>
+    <script type="module" src="https://unpkg.com/esp-web-tools@9.4.3/dist/web/install-button.js?module"></script>
+    <script>
+        const installButton = document.getElementById('install-button');
+        const boardSelect = document.getElementById('board-select');
+
+        function updateManifestPath() {
+            const board = boardSelect.value;
+            // This relative path is proven to work by your drink_crafter project
+            const manifestUrl = `release_assets/manifest-${board}.json`;
+            installButton.manifest = manifestUrl;
+        }
+
+        boardSelect.addEventListener('change', updateManifestPath);
+                
+        // Set the initial manifest path when the page loads
+        window.onload = updateManifestPath;
+    </script>
+
 </body>
 </html>
