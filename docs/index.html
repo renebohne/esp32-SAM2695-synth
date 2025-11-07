@@ -20,17 +20,6 @@
       border-radius: 6px;
       padding: 24px;
     }
-    .board {
-      border-bottom: 1px solid #e1e4e8;
-      padding: 16px 0;
-    }
-    .board:last-child {
-      border-bottom: none;
-    }
-    h1, h2 {
-      border-bottom: 1px solid #eaecef;
-      padding-bottom: .3em;
-    }
     .button {
       display: inline-block;
       padding: 10px 16px;
@@ -42,84 +31,45 @@
       border-radius: 6px;
       text-decoration: none;
       cursor: pointer;
+      margin-right: 10px;
+      margin-top: 10px;
     }
     .button:hover {
       background-color: #2c974b;
     }
   </style>
-
   <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
-
 </head>
 <body>
-
   <div class="container">
     <h1>XIAO-SYNTH Web Flasher</h1>
-    <p>Flash the latest firmware for your Seeed Studio XIAO board directly from the browser. No drivers needed (in Chrome/Edge).</p>
+    <p>Flash the latest firmware for your Seeed Studio XIAO board directly from the browser.</p>
     <p>
       <b>Instructions:</b><br>
       1. Plug in your XIAO board.<br>
       2. Put it into <b>bootloader mode</b> (Hold BOOT, press RESET, release BOOT).<br>
-      3. Click the "Connect" button that appears, select the correct COM/Serial port, and click "Connect".<br>
-      4. Click the "Flash" button for your board.
+      3. Click the button for your board. The flasher will first connect, then flash.
     </p>
 
-    <esp-web-install-button class="button">
-      Connect
-      <div slot="unsupported">Your browser doesn't support Web Serial. Please use Google Chrome or Microsoft Edge.</div>
-      
-      <div slot="builds">
-        <div class="board"
-             data-name="XIAO ESP32-S3"
-             data-chip-family="esp32s3"
-             data-flash-mode="dio"
-             data-baud-rate="921600"
-             data-app-offset="0x10000"
-             data-bootloader-offset="0x0"
-             data-partitions-offset="0x8000">
-          <span class="chip">Seeed XIAO ESP32-S3</span>
-          <button class="button"
-                  data-url="https://github.com/renebohne/esp32-SAM2695-synth/releases/latest/download/firmware-esp32s3.bin"
-                  slot="select">
-            Flash ESP32-S3
-          </button>
-        </div>
-
-        <div class="board"
-             data-name="XIAO ESP32-C3"
-             data-chip-family="esp32c3"
-             data-flash-mode="dio"
-             data-baud-rate="921600"
-             data-app-offset="0x10000"
-             data-bootloader-offset="0x0"
-             data-partitions-offset="0x8000">
-          <span class="chip">Seeed XIAO ESP32-C3</span>
-          <button class="button"
-                  data-url="https://github.com/renebohne/esp32-SAM2695-synth/releases/latest/download/firmware-esp32c3.bin"
-                  slot="select">
-            Flash ESP32-C3
-          </button>
-        </div>
-
-        <div class="board"
-             data-name="XIAO ESP32-C6"
-             data-chip-family="esp32c6"
-             data-flash-mode="dio"
-             data-baud-rate="921600"
-             data-app-offset="0x10000"
-             data-bootloader-offset="0x0"
-             data-partitions-offset="0x8000">
-          <span class="chip">Seeed XIAO ESP32-C6</span>
-          <button class="button"
-                  data-url="https://github.com/renebohne/esp32-SAM2695-synth/releases/latest/download/firmware-esp32c6.bin"
-                  slot="select">
-            Flash ESP32-C6
-          </button>
-        </div>
-      </div>
+    <esp-web-install-button class="button"
+      manifest="release_assets/manifest-esp32s3.json">
+      Flash ESP32-S3
+    </esp-web-install-button>
+    
+    <esp-web-install-button class="button"
+      manifest="release_assets/manifest-esp32c3.json">
+      Flash ESP32-C3
     </esp-web-install-button>
 
-  </div>
+    <esp-web-install-button class="button"
+      manifest="release_assets/manifest-esp32c6.json">
+      Flash ESP32-C6
+    </esp-web-install-button>
 
+    <div slot="unsupported" style="margin-top: 15px; color: #8B0000;">
+      Your browser doesn't support Web Serial. Please use Google Chrome or Microsoft Edge.
+    </div>
+
+  </div>
 </body>
 </html>

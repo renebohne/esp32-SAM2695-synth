@@ -1,8 +1,7 @@
 # .github/workflows/release.yml
 
-name: Create Release and Build Binaries
+name: Create Release and Deploy Flasher
 
-# This workflow runs when a new tag (starting with 'v') is pushed.
 on:
   push:
     tags:
@@ -11,14 +10,17 @@ on:
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
+    
+    # This is required to let the action write to gh-pages and create a release
     permissions:
-      contents: write
+      contents: write 
+      
     steps:
       # 1. Check out the repository code
       - name: Check out repository
         uses: actions/checkout@v4
 
-      # 2. Set up Python, which PlatformIO depends on
+      # 2. Set up Python
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -28,42 +30,97 @@ jobs:
       - name: Install PlatformIO Core
         run: pip install platformio
 
-      # 4. Install project library dependencies (from platformio.ini)
+      # 4. Install project libraries
       - name: Install project libraries
         run: pio lib install
-        working-directory: BLE  # Run in the directory with platformio.ini
+        working-directory: BLE
 
-      # 5. Build all environments from platformio.ini
+      # 5. Build all environments
       - name: Build PlatformIO Environments
         run: |
           pio run -e esp32s3
           pio run -e esp32c3
           pio run -e esp32c6
-        working-directory: BLE  # Run in the directory with platformio.ini
+        working-directory: BLE
 
-      # 6. Package the compiled .bin files into a separate folder for upload
-      - name: Package firmware binaries
+      # 6. Prepare deploy and release assets
+      - name: Prepare Assets and Manifests
         run: |
-          mkdir -p release_assets
-          cp BLE/.pio/build/esp32s3/firmware.bin release_assets/firmware-esp32s3.bin
-          cp BLE/.pio/build/esp32c3/firmware.bin release_assets/firmware-esp32c3.bin
-          cp BLE/.pio/build/esp32c6/firmware.bin release_assets/firmware-esp32c6.bin
+          # Create the folder structure
+          mkdir -p deploy/release_assets
 
-      # 7. Create the GitHub Release and upload the .bin files as assets
+          # Copy the main index.html file
+          cp index.html deploy/
+
+          # --- Package ESP32-S3 ---
+          cp BLE/.pio/build/esp32s3/firmware.bin       deploy/release_assets/firmware-esp32s3.bin
+          cp BLE/.pio/build/esp32s3/bootloader.bin     deploy/release_assets/bootloader-esp32s3.bin
+          cp BLE/.pio/build/esp32s3/partitions.bin     deploy/release_assets/partitions-esp32s3.bin
+
+          echo '{' > deploy/release_assets/manifest-esp32s3.json
+          echo '  "name": "XIAO-SYNTH (ESP32-S3)",' >> deploy/release_assets/manifest-esp32s3.json
+          echo '  "builds": [' >> deploy/release_assets/manifest-esp32s3.json
+          echo '    {' >> deploy/release_assets/manifest-esp32s3.json
+          echo '      "chipFamily": "ESP32-S3",' >> deploy/release_assets/manifest-esp32s3.json
+          echo '      "parts": [' >> deploy/release_assets/manifest-esp32s3.json
+          echo '        { "path": "bootloader-esp32s3.bin", "offset": 0 },' >> deploy/release_assets/manifest-esp32s3.json
+          echo '        { "path": "partitions-esp32s3.bin", "offset": 32768 },' >> deploy/release_assets/manifest-esp32s3.json
+          echo '        { "path": "firmware-esp32s3.bin", "offset": 65536 }' >> deploy/release_assets/manifest-esp32s3.json
+          echo '      ]' >> deploy/release_assets/manifest-esp32s3.json
+          echo '    }' >> deploy/release_assets/manifest-esp32s3.json
+          echo '  ]' >> deploy/release_assets/manifest-esp32s3.json
+          echo '}' >> deploy/release_assets/manifest-esp32s3.json
+
+          # --- Package ESP32-C3 ---
+          cp BLE/.pio/build/esp32c3/firmware.bin       deploy/release_assets/firmware-esp32c3.bin
+          cp BLE/.pio/build/esp32c3/bootloader.bin     deploy/release_assets/bootloader-esp32c3.bin
+          cp BLE/.pio/build/esp32c3/partitions.bin     deploy/release_assets/partitions-esp32c3.bin
+
+          echo '{' > deploy/release_assets/manifest-esp32c3.json
+          echo '  "name": "XIAO-SYNTH (ESP32-C3)",' >> deploy/release_assets/manifest-esp32c3.json
+          echo '  "builds": [' >> deploy/release_assets/manifest-esp32c3.json
+          echo '    {' >> deploy/release_assets/manifest-esp32c3.json
+          echo '      "chipFamily": "ESP32-C3",' >> deploy/release_assets/manifest-esp32c3.json
+          echo '      "parts": [' >> deploy/release_assets/manifest-esp32c3.json
+          echo '        { "path": "bootloader-esp32c3.bin", "offset": 0 },' >> deploy/release_assets/manifest-esp32c3.json
+          echo '        { "path": "partitions-esp32c3.bin", "offset": 32768 },' >> deploy/release_assets/manifest-esp32c3.json
+          echo '        { "path": "firmware-esp32c3.bin", "offset": 65536 }' >> deploy/release_assets/manifest-esp32c3.json
+          echo '      ]' >> deploy/release_assets/manifest-esp32c3.json
+          echo '    }' >> deploy/release_assets/manifest-esp32c3.json
+          echo '  ]' >> deploy/release_assets/manifest-esp32c3.json
+          echo '}' >> deploy/release_assets/manifest-esp32c3.json
+
+          # --- Package ESP32-C6 ---
+          cp BLE/.pio/build/esp32c6/firmware.bin       deploy/release_assets/firmware-esp32c6.bin
+          cp BLE/.pio/build/esp32c6/bootloader.bin     deploy/release_assets/bootloader-esp32c6.bin
+          cp BLE/.pio/build/esp32c6/partitions.bin     deploy/release_assets/partitions-esp32c6.bin
+
+          echo '{' > deploy/release_assets/manifest-esp32c6.json
+          echo '  "name": "XIAO-SYNTH (ESP32-C6)",' >> deploy/release_assets/manifest-esp32c6.json
+          echo '  "builds": [' >> deploy/release_assets/manifest-esp32c6.json
+          echo '    {' >> deploy/release_assets/manifest-esp32c6.json
+          echo '      "chipFamily": "ESP32-C6",' >> deploy/release_assets/manifest-esp32c6.json
+          echo '      "parts": [' >> deploy/release_assets/manifest-esp32c6.json
+          echo '        { "path": "bootloader-esp32c6.bin", "offset": 0 },' >> deploy/release_assets/manifest-esp32c6.json
+          echo '        { "path": "partitions-esp32c6.bin", "offset": 32768 },' >> deploy/release_assets/manifest-esp32c6.json
+          echo '        { "path": "firmware-esp32c6.bin", "offset": 65536 }' >> deploy/release_assets/manifest-esp32c6.json
+          echo '      ]' >> deploy/release_assets/manifest-esp32c6.json
+          echo '    }' >> deploy/release_assets/manifest-esp32c6.json
+          echo '  ]' >> deploy/release_assets/manifest-esp32c6.json
+          echo '}' >> deploy/release_assets/manifest-esp32c6.json
+
+      # 7. Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./deploy
+
+      # 8. Create the GitHub Release
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          # Use the release_assets directory and all files in it
-          files: release_assets/*
-          
-          # Use the tag name (e.g., "v1.0.0") as the release title
+          files: deploy/release_assets/*
           name: Release ${{ github.ref_name }}
-          
-          # Set draft: true if you want to manually edit notes before publishing
-          draft: false
-          
-          # Set prerelease: true if this is a pre-release
-          prerelease: false
         env:
-          # The GITHUB_TOKEN is automatically supplied by GitHub Actions
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
