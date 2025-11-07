@@ -49,8 +49,9 @@ jobs:
           # Create the folder structure
           mkdir -p deploy/release_assets
 
-          # Copy the main index.html file
-          cp docs/index.html deploy/
+          # --- THIS LINE IS UPDATED ---
+          cp docs/web_flasher.html deploy/web_flasher.html
+          # --- END OF UPDATE ---
 
           # --- Package ESP32-S3 ---
           cp BLE/.pio/build/esp32s3/firmware.bin       deploy/release_assets/firmware-esp32s3.bin
