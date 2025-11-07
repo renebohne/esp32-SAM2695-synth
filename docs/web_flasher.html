@@ -49,14 +49,17 @@
 
         function updateManifestPath() {
             const board = boardSelect.value;
-            // This relative path is proven to work by your drink_crafter project
-            const manifestUrl = `release_assets/manifest-${board}.json`;
+            
+            // *** HIER IST DIE ÄNDERUNG ***
+            // Wir verwenden jetzt die stabile Release-URL anstelle des relativen Pfads.
+            const manifestUrl = `https://github.com/renebohne/esp32-SAM2695-synth/releases/latest/download/manifest-${board}.json`;
+            
             installButton.manifest = manifestUrl;
         }
 
         boardSelect.addEventListener('change', updateManifestPath);
                 
-        // Set the initial manifest path when the page loads
+        // Setzt den initialen Pfad beim Laden der Seite
         window.onload = updateManifestPath;
     </script>
 
