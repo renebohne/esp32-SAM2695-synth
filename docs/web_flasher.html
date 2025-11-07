@@ -52,8 +52,7 @@
             
             // *** HIER IST DIE ÄNDERUNG ***
             // Wir verwenden jetzt die stabile Release-URL anstelle des relativen Pfads.
-            const manifestUrl = `https://github.com/renebohne/esp32-SAM2695-synth/releases/latest/download/manifest-${board}.json`;
-            
+            const manifestUrl = `release_assets/manifest-${board}.json`;
             installButton.manifest = manifestUrl;
         }
 
