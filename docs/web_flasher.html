@@ -9,7 +9,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #111827; /* Dark background */
+            background-color: #111827; /* Dunkler Hintergrund */
         }
     </style>
 </head>
@@ -23,20 +23,20 @@
 
         <div class="space-y-4">
             <div>
-                <label for="board-select" class="block text-sm font-medium text-gray-300 mb-1">1. Select your XIAO board</label>
+                <label for="board-select" class="block text-sm font-medium text-gray-300 mb-1">1. Wähle dein XIAO-Board</label>
                 <select id="board-select" class="w-full bg-gray-800 border border-gray-700 text-white rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500">
-                    <option value="esp32s3">XIAO ESP32-S3</option>
                     <option value="esp32c3">XIAO ESP32-C3</option>
+                    <option value="esp32s3">XIAO ESP32-S3</option>
                     <option value="esp32c6">XIAO ESP32-C6</option>
                 </select>
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-gray-300 mb-1">2. Install Firmware</label>
+                <label class="block text-sm font-medium text-gray-300 mb-1">2. Firmware installieren</label>
                 <esp-web-install-button id="install-button" class="w-full">
-                    <button slot="activate" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-4 rounded-lg transition">Install Firmware</button>
-                    <button slot="unsupported" class="w-full bg-gray-600 text-white font-semibold py-2.5 px-4 rounded-lg cursor-not-allowed">Unsupported Browser</button>
-                    <button slot="error" class="w-full bg-red-600 text-white font-semibold py-2.5 px-4 rounded-lg">Error</button>
+                    <button slot="activate" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-4 rounded-lg transition">Firmware installieren</button>
+                    <button slot="unsupported" class="w-full bg-gray-600 text-white font-semibold py-2.5 px-4 rounded-lg cursor-not-allowed">Browser nicht unterstützt</button>
+                    <button slot="error" class="w-full bg-red-600 text-white font-semibold py-2.5 px-4 rounded-lg">Fehler</button>
                 </esp-web-install-button>
             </div>
         </div>
@@ -50,15 +50,17 @@
         function updateManifestPath() {
             const board = boardSelect.value;
             
-            // *** HIER IST DIE ÄNDERUNG ***
-            // Wir verwenden jetzt die stabile Release-URL anstelle des relativen Pfads.
-            const manifestUrl = `release_assets/manifest-${board}.json`;
+            // *** DIES IST DIE KORREKTUR ***
+            // Der Pfad sucht nun nach dem Manifest im selben Verzeichnis,
+            // (ohne 'release_assets/'), passend zur neuen release.yml
+            const manifestUrl = `manifest-${board}.json`;
+            
             installButton.manifest = manifestUrl;
         }
 
         boardSelect.addEventListener('change', updateManifestPath);
                 
-        // Setzt den initialen Pfad beim Laden der Seite
+        // Setzt den initialen Manifest-Pfad beim Laden der Seite
         window.onload = updateManifestPath;
     </script>
 
