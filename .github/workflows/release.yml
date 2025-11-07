@@ -40,14 +40,12 @@ jobs:
         working-directory: BLE  # Run in the directory with platformio.ini
 
       # 6. Package the compiled .bin files into a separate folder for upload
-      #    We rename them to be unique for the release.
       - name: Package firmware binaries
         run: |
           mkdir -p release_assets
-          cp .pio/build/esp32s3/firmware.bin ../release_assets/firmware-esp32s3.bin
-          cp .pio/build/esp32c3/firmware.bin ../release_assets/firmware-esp32c3.bin
-          cp .pio/build/esp32c6/firmware.bin ../release_assets/firmware-esp32c6.bin
-        working-directory: BLE  # Run in the directory with platformio.ini
+          cp BLE/.pio/build/esp32s3/firmware.bin release_assets/firmware-esp32s3.bin
+          cp BLE/.pio/build/esp32c3/firmware.bin release_assets/firmware-esp32c3.bin
+          cp BLE/.pio/build/esp32c6/firmware.bin release_assets/firmware-esp32c6.bin
 
       # 7. Create the GitHub Release and upload the .bin files as assets
       - name: Create GitHub Release
