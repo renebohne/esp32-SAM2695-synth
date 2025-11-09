@@ -23,12 +23,14 @@ Inspired by this video, I decided to buy a XIAO Synth and extend the firmware:
 
 You can flash the latest pre-compiled firmware directly from your browser (Chrome or Edge).
 
+https://www.rene-bohne.de/esp32-SAM2695-synth/web_flasher
+
 1.  Plug in your XIAO board.
 2.  Put it into **bootloader mode**: Hold the **BOOT** button, press the **RESET** button, then release the **BOOT** button.
 3.  Click the link for your board below.
 4.  Click "Connect" and select the correct serial port (e.g., `... (COMX)` or `... (cu.usbmodem)`) to install the firmware.
+  
 
-**[Link to your Web Flasher Page]** (e.g., `https://www.rene-bohne.de/esp32-SAM2695-synth/`)
 
 ## 🛠️ Building from Source (pioarduino)
 
