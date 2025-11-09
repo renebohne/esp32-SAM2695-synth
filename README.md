@@ -2,7 +2,14 @@
 
 This project turns a Seeed Studio XIAO ESP32 board into a powerful, wireless **BLE MIDI Synthesizer** using the SAM2695 audio synth chip.
 
-It receives MIDI messages (like key presses, control changes, and program changes) over Bluetooth LE and forwards them to the SAM2695 chip, which generates the audio. This is designed for boards like the **Seeed XIAO MIDI Synth**.
+It receives MIDI messages (like key presses, control changes, and program changes) over Bluetooth LE and forwards them to the SAM2695 chip, which generates the audio. This is designed for boards like the [XIAO MIDI Synthesizer](https://wiki.seeedstudio.com/xiao_midi_synthesizer/).
+
+## Inspiration
+
+Inspired by this video, I decided to buy a XIAO Synth and extend the firmware:
+
+[![Watch the video](https://img.youtube.com/vi/E3ytQtskCXQ/hqdefault.jpg)](https://www.youtube.com/watch?v=E3ytQtskCXQ)
+
 
 ## ✨ Features
 
@@ -34,7 +41,6 @@ To compile this, you **must use the pioarduino IDE extension for VS Code**, whic
 The project is already configured to automatically install these libraries on build:
 
 * **[Control-Surface](https://github.com/tttapa/Control-Surface)**: Used for handling the BLE MIDI callbacks.
-* **[Seeed_Arduino_MIDIMaster](https://github.com/Seeed-Studio/Seeed_Arduino_MIDIMaster)**: Used as a dependency for the SAM2695 synth.
 
 ### How to Compile
 
